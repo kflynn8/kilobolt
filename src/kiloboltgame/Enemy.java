@@ -6,30 +6,52 @@ public class Enemy {
 
 	private int power, speedX, centerX, centerY;
 	private Background bg = StartingClass.getBg1();
-
-	public Rectangle r = new Rectangle(0,0,0,0);
+	private int movementSpeed;
+	public Rectangle r = new Rectangle(0, 0, 0, 0);
 	public int health = 5;
 
 	// Behavioral Methods
 	public void update() {
+		follow();
 		centerX += speedX;
-		speedX = bg.getSpeedX()*5;
-		r.setBounds(centerX - 25, centerY-25, 50, 60);
-		
-		if (r.intersects(Robot.yellowRed)){
+		speedX = bg.getSpeedX() * 5 + movementSpeed;
+		speedX = bg.getSpeedX() * 5;
+		r.setBounds(centerX - 25, centerY - 25, 50, 60);
+
+		if (r.intersects(Robot.yellowRed)) {
 			checkCollision();
 		}
-		
+
 	}
 
+	public void follow() {
 
+		if (centerX < -95 || centerX > 810) {
+			movementSpeed = 0;
+		}
 
-	private void checkCollision() {
-		if (r.intersects(Robot.rect) || r.intersects(Robot.rect2) || r.intersects(Robot.rect3) || r.intersects(Robot.rect4)){
-			System.out.println("collision");
-			
+		else if (Math.abs(robot.getCenterX() - centerX) < 5) {
+			movementSpeed = 0;
+		}
+
+		else {
+
+			if (robot.getCenterX() >= centerX) {
+				movementSpeed = 1;
+			} else {
+				movementSpeed = -1;
 			}
 		}
+
+	}
+
+	private void checkCollision() {
+		if (r.intersects(Robot.rect) || r.intersects(Robot.rect2)
+				|| r.intersects(Robot.rect3) || r.intersects(Robot.rect4)) {
+			System.out.println("collision");
+
+		}
+	}
 
 	public void die() {
 
@@ -59,8 +81,6 @@ public class Enemy {
 		return bg;
 	}
 
-
-
 	public void setPower(int power) {
 		this.power = power;
 	}
@@ -81,5 +101,4 @@ public class Enemy {
 		this.bg = bg;
 	}
 
-	
 }
